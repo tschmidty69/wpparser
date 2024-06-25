@@ -331,6 +331,11 @@ def _parse_postmeta(element):
         key = field.find("./{%s}meta_key" % WP_NAMESPACE).text
         value = field.find("./{%s}meta_value" % WP_NAMESPACE).text
 
+
+    for field in fields:
+        key = field.find("./{%s}meta_key" % WP_NAMESPACE).text
+        value = field.find("./{%s}meta_value" % WP_NAMESPACE).text
+
         if key == "_wp_attachment_metadata":
             stream = StringIO(value.encode())
             try:
@@ -340,9 +345,10 @@ def _parse_postmeta(element):
                 pass
             except Exception as e:
                 raise(e)
-
-        if key == "_wp_attached_file":
+        elif key == "_wp_attached_file":
             metadata["attached_file"] = value
+        else:
+            metadata[key] = value
 
     return metadata
 
